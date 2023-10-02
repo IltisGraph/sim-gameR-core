@@ -24,7 +24,7 @@ const createScene = function () {
 
     BABYLON.SceneLoader.ImportMesh(
         "",
-        "/3d/",
+        "./3d/",
         "mine.gltf",
         scene,
         function(meshes, particleSystems, skeletons, animationGroups) {
