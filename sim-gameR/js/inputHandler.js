@@ -1,4 +1,4 @@
-export function inputInit(camera, tracking, pos) {
+export function inputInit(camera, tracking, pos, user) {
     window.addEventListener("pointerdown", (event) => {
         // console.log("X: " + event.clientX);
         // console.log("Y: " + event.clientY);
