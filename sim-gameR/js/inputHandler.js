@@ -1,4 +1,5 @@
-import { createShopScene } from "./sceneCreator";
+import { createShopScene, createGameScene } from "./sceneCreator";
+import { island_size } from "./constants";
 // import { Inspector } from "@babylonjs/inspector";
 
 
@@ -130,12 +131,12 @@ function loadShop(engine, analytics, event) {
 }
 
 function loadGame(engine, analytics, event) {
-    // engine.stopRenderLoop();
+    engine.stopRenderLoop();
 
-    // const s = createGameScene(engine, island_size);
-    // inputInit(s["camera"], false, {x:0, y:0}, analytics, event, engine)
+    const s = createGameScene(engine, island_size);
+    inputInit(s["camera"], false, {x:0, y:0}, analytics, event, engine)
 
-    // engine.runRenderLoop(() => {
-    //     s["scene"].render();
-    // })
+    engine.runRenderLoop(() => {
+        s["scene"].render();
+    })
 }
