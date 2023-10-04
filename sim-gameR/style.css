@@ -46,5 +46,13 @@ html, body {
     background-color: rgba(0, 0, 0, 0.5);
     pointer-events: none;
   }
+
+  #shop {
+    position: fixed;
+    bottom: 1%;
+    right: 1%;
+    height: 75px;
+    width: 75px;
+  }
   
   
