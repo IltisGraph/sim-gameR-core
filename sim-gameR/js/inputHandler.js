@@ -1,4 +1,4 @@
-import { createShopScene, createGameScene } from "./sceneCreator";
+import {getShopScene, getGameScene } from "./sceneCreator";
 import { island_size } from "./constants";
 // import { Inspector } from "@babylonjs/inspector";
 
@@ -17,6 +17,8 @@ export function inputInit(camera, tracking, pos, analytics, event, engine) {
         event(analytics, "shop_open");
         loadShop(engine, analytics, event);
     }
+
+    document.getElementById("shop").innerText = "Shop";
     
     window.addEventListener("pointermove", (event) => {
         if (!tracking) {
@@ -120,7 +122,7 @@ function shopInputHandler(camera, engine, analytics, event) {
 function loadShop(engine, analytics, event) {
     engine.stopRenderLoop();
 
-    const s = createShopScene(engine);
+    const s = getShopScene(engine);
     const shopScene = s["scene"];
     const camera = s["camera"];
     shopInputHandler(camera, engine, analytics, event);
@@ -133,7 +135,7 @@ function loadShop(engine, analytics, event) {
 function loadGame(engine, analytics, event) {
     engine.stopRenderLoop();
 
-    const s = createGameScene(engine, island_size);
+    const s = getGameScene(engine, island_size);
     inputInit(s["camera"], false, {x:0, y:0}, analytics, event, engine)
 
     engine.runRenderLoop(() => {

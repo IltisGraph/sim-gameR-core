@@ -1,9 +1,25 @@
 import * as BABYLON from "../node_modules/@babylonjs/core";
 import "../node_modules/@babylonjs/loaders/glTF";
+import {island_size} from "./constants";
 
+let ShopScene;
+let gameScene;
 
+export function preloadScenes(engine) {
+    ShopScene = createShopScene(engine);
+    gameScene = createGameScene(engine, island_size);
+     
+}
 
-export function createShopScene(engine) {
+export function getGameScene() {
+    return gameScene;
+}
+
+export function getShopScene() {
+    return ShopScene;
+}
+
+function createShopScene(engine) {
     const scene = new BABYLON.Scene(engine);
     scene.createDefaultLight();
     const buyable = ["mine", "ofen_aus", "schleifer_diamant"];
@@ -33,7 +49,7 @@ export function createShopScene(engine) {
 }
 
 
-export function createGameScene(engine, island_size) {
+function createGameScene(engine, island_size) {
     console.log("Loading gameScene!");
     const scene = new BABYLON.Scene(engine);
 

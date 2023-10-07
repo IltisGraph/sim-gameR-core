@@ -2,7 +2,7 @@ import * as BABYLON from "./node_modules/@babylonjs/core";
 import "./node_modules/@babylonjs/loaders/glTF"
 import { inputInit } from "./js/inputHandler";
 import { preloadMeshes, getMesh } from "./js/loader";
-import { createGameScene } from "./js/sceneCreator";
+import { getGameScene, preloadScenes } from "./js/sceneCreator";
 import { island_size } from "./js/constants";
 // import { Inspector } from "@babylonjs/inspector";
 
@@ -73,13 +73,13 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
+preloadScenes(engine);
 
 
 
 
 
-
-const s = createGameScene(engine, island_size);
+const s = getGameScene();
 
 
 
