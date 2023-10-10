@@ -1,5 +1,7 @@
 import {getShopScene, getGameScene } from "./sceneCreator";
-import { island_size } from "./constants";
+import { island_size, buyable } from "./constants";
+import "../node_modules/@babylonjs/loaders/glTF"
+import * as BABYLON from "../node_modules/@babylonjs/core";
 // import { Inspector } from "@babylonjs/inspector";
 
 
@@ -71,6 +73,8 @@ function shopInputHandler(camera, engine, analytics, event) {
     document.getElementById("shop").innerText = "Verlassen";
     document.getElementById("shop").onclick = () => {
         loadGame(engine, analytics, event);
+        // remove the scene listener from the shop
+        getShopScene()["scene"].onPointerObservable.clear();
     }
 
     let pos = {x:0, y:0}
@@ -116,13 +120,19 @@ function shopInputHandler(camera, engine, analytics, event) {
     
     window.addEventListener("pointerup", (event) => {
         tracking = false;
+
+        // see if the buy button is pressed
+        //width: 270px; height: 150px
+        
+
+
     })
 }
 
 function loadShop(engine, analytics, event) {
     engine.stopRenderLoop();
 
-    const s = getShopScene(engine);
+    const s = getShopScene(analytics, event, engine);
     const shopScene = s["scene"];
     const camera = s["camera"];
     shopInputHandler(camera, engine, analytics, event);
@@ -142,3 +152,29 @@ function loadGame(engine, analytics, event) {
         s["scene"].render();
     })
 }
+
+export function loadGameWithNewBuilding(engine, analytics, event, buildingNr, shopScene) {
+    engine.stopRenderLoop();
+
+    const s = getGameScene(engine, island_size);
+    inputInit(s["camera"], false, {x:0, y:0}, analytics, event, engine)
+
+    // create the new Building
+    const loaded = BABYLON.SceneLoader.ImportMesh(
+        "",
+        "./3d/",
+        buyable[buildingNr] + ".gltf",
+        s["scene"],
+        function (meshes) {
+            console.log("successfully loaded " + buildingNr);
+            const mesh = meshes[0];
+            mesh.position.set(10, 0, 10);
+        }
+    )
+    
+    engine.runRenderLoop(() => {
+        s["scene"].render();
+    })
+}
+
+

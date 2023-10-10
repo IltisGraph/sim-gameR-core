@@ -1,12 +1,13 @@
 import * as BABYLON from "../node_modules/@babylonjs/core";
 import "../node_modules/@babylonjs/loaders/glTF";
-import {island_size} from "./constants";
+import {island_size, buyable} from "./constants";
+import { loadGameWithNewBuilding } from "./inputHandler";
 
 let ShopScene;
 let gameScene;
 
-export function preloadScenes(engine) {
-    ShopScene = createShopScene(engine);
+export function preloadScenes(engine, analytics, event) {
+    ShopScene = createShopScene(engine, analytics, event);
     gameScene = createGameScene(engine, island_size);
      
 }
@@ -15,14 +16,15 @@ export function getGameScene() {
     return gameScene;
 }
 
-export function getShopScene() {
+export function getShopScene(analytics, event, engine) {
+    createShopSceneObservers(ShopScene["scene"], analytics, event, engine);
     return ShopScene;
 }
 
-function createShopScene(engine) {
+function createShopScene(engine, analytics, event) {
     const scene = new BABYLON.Scene(engine);
     scene.createDefaultLight();
-    const buyable = ["mine", "ofen_aus", "schleifer_diamant"];
+    
     const camera = new BABYLON.UniversalCamera("shopCam", new BABYLON.Vector3(0, 0, 0), scene);
     // camera.attachControl(true);
     let positions = [];
@@ -43,10 +45,58 @@ function createShopScene(engine) {
     
         )
     }
+    const buyCube = BABYLON.SceneLoader.ImportMesh(
+        "",
+        "./3d/",
+        "shopBuy.gltf",
+        scene, 
+        function (meshes, particleSystems, skeletons, animationGroups) {
+            const model = meshes[0];
+            model.rotate(BABYLON.Axis.Y, Math.PI / 2);
+            model.position.set(-1000, -1.5, 10);
+            for (let i = 0; i < buyable.length; i++) {
+                const cloneName = i + "_buyButton";
+                const c = model.clone(cloneName);
+                c.position.set(i * 5, -1.5, 10);
+                c.rotate(BABYLON.Axis.Y, Math.PI);
+                
+            }
+        }
+    );
+    // scene.onPointerObservable.cancelAllCoroutines
+    createShopSceneObservers(scene, analytics, event, engine);
+    
 
 
     return {"scene":scene, "camera":camera};
 }
+
+function createShopSceneObservers(scene, analytics, event, engine) {
+    scene.onPointerObservable.add((pointerInfo) => {            
+        switch (pointerInfo.type) {
+            case BABYLON.PointerEventTypes.POINTERDOWN:
+                if (pointerInfo.pickInfo.pickedMesh == null) {
+                    return;
+                }
+                break
+            case BABYLON.PointerEventTypes.POINTERUP:
+                if (pointerInfo.pickInfo.pickedMesh == null) {
+                    return;
+                }
+               
+                const pickedName = pointerInfo.pickInfo.pickedMesh.name;
+                console.log("picked: " + pickedName);
+                const nr = pickedName.slice(0, 1);
+                // create the bought object
+                loadGameWithNewBuilding(engine, analytics, event, nr, scene);
+                scene.onPointerObservable.clear()
+                break;
+                
+
+        }
+    });
+}
+
 
 
 function createGameScene(engine, island_size) {

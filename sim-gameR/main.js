@@ -9,6 +9,8 @@ import { island_size } from "./js/constants";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
 import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-analytics.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
+import { getPerformance } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-performance.js";
+;
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -29,6 +31,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
+const perf = getPerformance(app);
 
 
 const canvas = document.getElementById("renderCanvas");
@@ -73,7 +76,7 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-preloadScenes(engine);
+preloadScenes(engine, analytics, logEvent);
 
 
 
