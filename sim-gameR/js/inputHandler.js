@@ -165,10 +165,18 @@ export function loadGameWithNewBuilding(engine, analytics, event, buildingNr, sh
         "./3d/",
         buyable[buildingNr] + ".gltf",
         s["scene"],
-        function (meshes) {
+        function (meshes, particleSystems, skeletons, animationGroups) {
             console.log("successfully loaded " + buildingNr);
             const mesh = meshes[0];
             mesh.position.set(10, 0, 10);
+            if (buildingNr == 0) {
+                // mine
+                animationGroups[1].start();
+                animationGroups[1].loopAnimation = true;
+                animationGroups[0].start();
+                animationGroups[0].loopAnimation = true;
+
+            }
         }
     )
     
