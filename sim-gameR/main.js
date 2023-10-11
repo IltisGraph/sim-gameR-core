@@ -1,8 +1,8 @@
 import * as BABYLON from "./node_modules/@babylonjs/core";
 import "./node_modules/@babylonjs/loaders/glTF"
-import { inputInit } from "./js/inputHandler";
+import { inputInit, shopInputHandler } from "./js/inputHandler";
 import { preloadMeshes, getMesh } from "./js/loader";
-import { getGameScene, preloadScenes } from "./js/sceneCreator";
+import { getGameScene, getShopScene, preloadScenes } from "./js/sceneCreator";
 import { island_size } from "./js/constants";
 // import { Inspector } from "@babylonjs/inspector";
 
@@ -77,7 +77,7 @@ onAuthStateChanged(auth, (user) => {
 });
 
 preloadScenes(engine, analytics, logEvent);
-
+shopInputHandler(getShopScene()["camera"], engine, analytics, logEvent);
 
 
 

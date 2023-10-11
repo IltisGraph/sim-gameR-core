@@ -8,6 +8,7 @@ let gameScene;
 
 export function preloadScenes(engine, analytics, event) {
     ShopScene = createShopScene(engine, analytics, event);
+    // ShopScene["scene"].onPointerObservable.clear();
     gameScene = createGameScene(engine, island_size);
      
 }
@@ -64,7 +65,7 @@ function createShopScene(engine, analytics, event) {
         }
     );
     // scene.onPointerObservable.cancelAllCoroutines
-    createShopSceneObservers(scene, analytics, event, engine);
+    // createShopSceneObservers(scene, analytics, event, engine);
     
 
 
