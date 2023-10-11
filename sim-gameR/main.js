@@ -77,7 +77,7 @@ onAuthStateChanged(auth, (user) => {
 });
 
 preloadScenes(engine, analytics, logEvent);
-shopInputHandler(getShopScene()["camera"], engine, analytics, logEvent);
+shopInputHandler(getShopScene(analytics, logEvent, engine)["camera"], engine, analytics, logEvent);
 
 
 

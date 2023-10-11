@@ -150,7 +150,7 @@ function loadShop(engine, analytics, event) {
     document.getElementById("shop").onclick = () => {
         loadGame(engine, analytics, event);
         // remove the scene listener from the shop
-        getShopScene()["scene"].onPointerObservable.clear();
+        getShopScene(analytics, event, engine)["scene"].onPointerObservable.clear();
     }
 
     const s = getShopScene(analytics, event, engine);
