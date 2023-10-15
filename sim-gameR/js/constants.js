@@ -4,3 +4,4 @@ export const buyable = ["mine", "ofen_aus", "schleifer_diamant"];
 export class MovingVars {
     static gamePage = "game";
 }
+

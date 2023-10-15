@@ -1,15 +1,15 @@
 import * as BABYLON from "./node_modules/@babylonjs/core";
 import "./node_modules/@babylonjs/loaders/glTF"
-import { inputInit, shopInputHandler } from "./js/inputHandler";
-import { preloadMeshes, getMesh } from "./js/loader";
 import { getGameScene, getShopScene, preloadScenes } from "./js/sceneCreator";
-import { island_size } from "./js/constants";
 // import { Inspector } from "@babylonjs/inspector";
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
 import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-analytics.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
 import { getPerformance } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-performance.js";
+import Game from "./js/Game";
+import GameScene from "./js/GameScene";
+import ShopScene from "./js/ShopScene";
 ;
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -37,6 +37,16 @@ const perf = getPerformance(app);
 const canvas = document.getElementById("renderCanvas");
 const engine = new BABYLON.Engine(canvas);
 
+preloadScenes(engine, analytics, logEvent);
+
+const game = new Game(null, engine, logEvent, analytics);
+GameScene.game = game;
+ShopScene.game = game;
+game.sceneClass = GameScene;
+game.setScene(GameScene);
+
+
+
 let user;
 
 
@@ -52,7 +62,7 @@ document.getElementById("submitBtn").onclick = function () {
         localStorage.setItem("login_sim", "true");
         document.getElementById("myWindow").style = "display:none;";
         document.getElementById('authBlocker').style.display = "none";
-        inputInit(camera, tracking, pos, analytics, logEvent, engine);
+        // inputInit(camera, tracking, pos, analytics, logEvent, engine);
 
 
     }).catch((error) => {
@@ -70,33 +80,25 @@ onAuthStateChanged(auth, (user) => {
         user = auth.currentUser;
         document.getElementById("myWindow").style = "display:none;";
         document.getElementById('authBlocker').style.display = "none";
-        inputInit(camera, tracking, pos, analytics, logEvent, engine);
+        // inputInit(camera, tracking, pos, analytics, logEvent, engine);
 
     } else {
     }
 });
 
-preloadScenes(engine, analytics, logEvent);
-shopInputHandler(getShopScene(analytics, logEvent, engine)["camera"], engine, analytics, logEvent);
-
-
-
-
-const s = getGameScene();
+// shopInputHandler(getShopScene(analytics, logEvent, engine)["camera"], engine, analytics, logEvent);
+// MovingVars.gamePage = "game";
 
 
 
 
 
-const camera = s["camera"];
-const scene = s["scene"];
 
 
 
-
-engine.runRenderLoop(function () {
-    scene.render();
-});
+// engine.runRenderLoop(function () {
+//     scene.render();
+// });
 
 window.addEventListener("resize", function () {
     engine.resize();
