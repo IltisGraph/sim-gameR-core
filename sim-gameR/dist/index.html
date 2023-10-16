@@ -7,15 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <title>Sim-GameR</title>
-  <script type="module" crossorigin src="./assets/index-69a45f24.js"></script>
+  <script type="module" crossorigin src="./assets/index-b7130f9e.js"></script>
   <link rel="stylesheet" href="./assets/index-c53597d4.css">
 </head>
 
 <body>
     <div id="authBlocker" class="auth-blocker"></div>
     <div id="myWindow" class="window">
-        <input type="text" id="username" placeholder="Benutzername" />
-        <input type="password" id="password" placeholder="Passwort"/><br>
+        <form>
+        <input type="text" id="username" placeholder="Benutzername" autocomplete="username"/>
+        <input type="password" id="password" placeholder="Passwort" autocomplete="current-password"/><br>
+        </form>
         <button type="button" id="submitBtn">Login!</button>
       </div>
       <button id="shop">Shop</button>
