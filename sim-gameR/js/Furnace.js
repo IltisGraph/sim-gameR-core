@@ -1,7 +1,6 @@
 import { AbstractMesh, Vector2 } from "@babylonjs/core";
 
-export default class Mine {
-    
+export default class Furnace {
     /**
      * 
      * @param {Vector2} position 
@@ -14,11 +13,10 @@ export default class Mine {
     }
 
     update() {
-        this.mesh.position._x = this.x;
-        this.mesh.position._y = this.y;
+
     }
 
     onclick() {
-        console.log("triggered mine onclick function")
+        console.log("clicked furnace!");
     }
 }

@@ -7,9 +7,11 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebas
 import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-analytics.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
 import { getPerformance } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-performance.js";
+import { getRemoteConfig, getValue, fetchConfig, activate } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-remote-config.js";
 import Game from "./js/Game";
 import GameScene from "./js/GameScene";
 import ShopScene from "./js/ShopScene";
+import { MovingVars } from "./js/constants";
 ;
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -32,6 +34,20 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const perf = getPerformance(app);
+const remoteConfig = getRemoteConfig(app);
+
+remoteConfig.defaultConfig = {
+    "shop_button_color": "#fa9507"
+};
+
+activate(remoteConfig);
+
+fetchConfig(remoteConfig);
+
+
+
+const buy_button_color = getValue(remoteConfig, "shop_button_color");
+document.getElementById("shop").style.backgroundColor = buy_button_color._value;
 
 
 const canvas = document.getElementById("renderCanvas");
@@ -62,7 +78,9 @@ document.getElementById("submitBtn").onclick = function () {
         localStorage.setItem("login_sim", "true");
         document.getElementById("myWindow").style = "display:none;";
         document.getElementById('authBlocker').style.display = "none";
+        localStorage.setItem("user_sim", userCredential.uid);
         // inputInit(camera, tracking, pos, analytics, logEvent, engine);
+
 
 
     }).catch((error) => {
@@ -80,25 +98,14 @@ onAuthStateChanged(auth, (user) => {
         user = auth.currentUser;
         document.getElementById("myWindow").style = "display:none;";
         document.getElementById('authBlocker').style.display = "none";
+        localStorage.setItem("user_sim", user.uid);
         // inputInit(camera, tracking, pos, analytics, logEvent, engine);
 
     } else {
     }
 });
 
-// shopInputHandler(getShopScene(analytics, logEvent, engine)["camera"], engine, analytics, logEvent);
-// MovingVars.gamePage = "game";
 
-
-
-
-
-
-
-
-// engine.runRenderLoop(function () {
-//     scene.render();
-// });
 
 window.addEventListener("resize", function () {
     engine.resize();

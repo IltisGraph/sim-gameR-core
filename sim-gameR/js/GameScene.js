@@ -2,12 +2,16 @@ import { MovingVars, buyable, island_size } from "./constants";
 import * as BABYLON from "../node_modules/@babylonjs/core"
 import "../node_modules/@babylonjs/loaders/glTF";
 import ShopScene from "./ShopScene";
+import Mine from "./Mine";
+import Furnace from "./Furnace";
+import Saw from "./Saw";
 
 
 export default class GameScene {
     
     static game;
     static name = "game";
+    static buildings = {};
     /**
      * should only be called once to load the scene. use setScene() then
      * @param {BABYLON.Engine} engine
@@ -33,13 +37,6 @@ export default class GameScene {
                         const cloneName = "sandClone_" + x + "_" + y;
                         let m = model.clone(cloneName);
                         m.position.set(x * 2, 0, y * 2);
-                        m.actionManager = new BABYLON.ActionManager(scene);
-                        m.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
-                            { trigger: BABYLON.ActionManager.OnPickTrigger },
-                            (e) => {
-                                console.log("clicked: " + m.name);
-                            }
-                        ))
                     }
                 }
             }
@@ -101,12 +98,22 @@ export default class GameScene {
      */
     static createSceneListener() {
         this.scene.onPointerObservable.add((pointerInfo) => {
+            let pMesh;
             switch (pointerInfo.type) {
                 case BABYLON.PointerEventTypes.POINTERDOUBLETAP:
-                    const pickedName = pointerInfo.pickInfo.pickedMesh.name;
-                    console.log("Double tapped on: " + pickedName);
-                    console.log(pointerInfo.pickInfo.pickedMesh.position);
+                    pMesh = pointerInfo.pickInfo.pickedMesh;
+                    console.log("Double tapped on: " + pMesh.parent.name);
+                    console.log(pMesh.parent.absolutePosition);
                     break;
+                case BABYLON.PointerEventTypes.POINTERPICK:
+                    pMesh = pointerInfo.pickInfo.pickedMesh;
+                    if (("" + pMesh.parent.name).slice(0, 9) === "sandClone") {
+                        return;
+                    }
+                    console.log("picked: " + pMesh.parent.name);
+                    this.buildings[pMesh.parent.name].onclick();
+                    break;
+
             }
         })
     }
@@ -223,13 +230,41 @@ export default class GameScene {
                 mesh.position.set(10, 0, 10);
                 if (buildingNr == 0) {
                     // mine
-                    animationGroups[1].start();
+                    GameScene.buildings[mesh.name] = new Mine(mesh.position, mesh);
+                    animationGroups[1].stop();
                     animationGroups[1].loopAnimation = true;
-                    animationGroups[0].start();
+                    animationGroups[0].stop();
                     animationGroups[0].loopAnimation = true;
 
+                } else if (buildingNr == 1) {
+                    // furnace
+                    GameScene.buildings[mesh.name] = new Furnace(mesh.position, mesh);
+                } else if (buildingNr == 2) {
+                    // saw
+                    GameScene.buildings[mesh.name] = new Saw(mesh.position, mesh);
+                    animationGroups[1].stop();
+                    animationGroups[1].loopAnimation = true;
+                    animationGroups[0].stop();
+                    animationGroups[0].loopAnimation = true;
                 }
             }
         )
     }
+
+    /**
+     * Creates a move UI around a position
+     * @param {BABYLON.Vector2} position 
+     */
+    static loadMoveUI(position) {
+
+    }
+
+    /**
+     * loads the game from the rtdb
+     * @param {integer} plotNr 
+     */
+    // static loadGame(plotNr, get, ref, db) {
+    //     const user = localStorage.getItem("user_sim");
+    //     get(ref(db))
+    // }
 }
