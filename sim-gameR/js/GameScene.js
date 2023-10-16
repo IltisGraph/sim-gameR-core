@@ -12,6 +12,9 @@ export default class GameScene {
     static game;
     static name = "game";
     static buildings = {};
+    static moveUILoaded = false;
+    static movingMeshwithParent = null;
+    static movingUIMeshes = [];
     /**
      * should only be called once to load the scene. use setScene() then
      * @param {BABYLON.Engine} engine
@@ -102,12 +105,56 @@ export default class GameScene {
             switch (pointerInfo.type) {
                 case BABYLON.PointerEventTypes.POINTERDOUBLETAP:
                     pMesh = pointerInfo.pickInfo.pickedMesh;
+                    if (("" + pMesh.parent.name).startsWith("m_c") || ("" + pMesh.parent.name).slice(0, 9) === "sandClone") {
+                        return;
+                    }
                     console.log("Double tapped on: " + pMesh.parent.name);
                     console.log(pMesh.parent.absolutePosition);
+                    if (this.moveUILoaded) {
+                        this.removeMoveUI();
+                    }
+                    this.loadMoveUI(pMesh);
                     break;
                 case BABYLON.PointerEventTypes.POINTERPICK:
                     pMesh = pointerInfo.pickInfo.pickedMesh;
+                    // console.log(pMesh.parent.absolutePosition)
                     if (("" + pMesh.parent.name).slice(0, 9) === "sandClone") {
+                        this.removeMoveUI();
+                        return;
+                    }
+                    if (("" + pMesh.parent.name).startsWith("m_c")) {
+                        // the move UI
+                        const dir = ("" + pMesh.parent.name).slice(3, 4);
+                        // dir --> 0 = O | 1 = W | 2 = N | 3 = S
+                        console.log("moving current movingMeshwithParent")
+                        switch (parseInt(dir)) {
+                            case 0:
+                                this.movingMeshwithParent.position.x += 2;
+                                for (let i = 0; i < this.movingUIMeshes.length; i++) {
+                                    this.movingUIMeshes[i].position.x += 2;
+                                }
+                                break;
+                            case 3:
+                                this.movingMeshwithParent.position.z -= 2;
+                                for (let i = 0; i < this.movingUIMeshes.length; i++) {
+                                    this.movingUIMeshes[i].position.z -= 2;
+                                }
+                                break;
+                            case 1:
+                                for (let i = 0; i < this.movingUIMeshes.length; i++) {
+                                    this.movingUIMeshes[i].position.x -= 2;
+                                }
+                                this.movingMeshwithParent.position.x -= 2;
+                                break;
+                            case 2:
+                                for (let i = 0; i < this.movingUIMeshes.length; i++) {
+                                    this.movingUIMeshes[i].position.z += 2;
+                                }
+                                this.movingMeshwithParent.position.z += 2;
+                                break;
+                        }
+
+
                         return;
                     }
                     console.log("picked: " + pMesh.parent.name);
@@ -253,9 +300,50 @@ export default class GameScene {
 
     /**
      * Creates a move UI around a position
-     * @param {BABYLON.Vector2} position 
+     * @param {BABYLON.AbstractMesh} position 
      */
-    static loadMoveUI(position) {
+    static loadMoveUI(mesh) {
+        if (this.moveUILoaded) {
+            return;
+        }
+        const position = mesh.parent.absolutePosition;
+        this.movingMeshwithParent = mesh.parent;
+        this.moveUILoaded = true;
+        BABYLON.SceneLoader.ImportMesh(
+            "",
+            "../3d/",
+            "move.gltf",
+            this.scene,
+            function (meshes, particleSystems, skeletons, animationGroups) {
+                console.log("loading move UI");
+                const mesh = meshes[0];
+                mesh.name = "m_c0"
+                mesh.position.set(position._x + 2, 4, position._z);
+                const c1 = mesh.clone("m_c1");
+                c1.position.set(position._x - 2, 4, position._z)
+                c1.rotate(BABYLON.Axis.Y, Math.PI)
+                const c2 = mesh.clone("m_c2");
+                c2.position.set(position._x, 4, position._z + 2)
+                c2.rotate(BABYLON.Axis.Y, -(Math.PI / 2))
+                const c3 = mesh.clone("m_c3");
+                c3.position.set(position._x, 4, position._z - 2)
+                c3.rotate(BABYLON.Axis.Y, Math.PI / 2);
+                GameScene.movingUIMeshes.push(mesh);
+                GameScene.movingUIMeshes.push(c1);
+                GameScene.movingUIMeshes.push(c2);
+                GameScene.movingUIMeshes.push(c3);
+
+            }
+        )
+    }
+
+    static removeMoveUI() {
+        this.moveUILoaded = false;
+        for (let i = 0; i < this.movingUIMeshes.length; i++) {
+            this.movingUIMeshes[i].dispose();
+            this.movingUIMeshes[i] = null;
+        }
+        this.movingUIMeshes = [];
 
     }
 
