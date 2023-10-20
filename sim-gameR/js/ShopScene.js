@@ -1,6 +1,6 @@
-import * as BABYLON from "../node_modules/@babylonjs/core"
+import "@babylonjs/loaders/glTF";
+import * as BABYLON from "@babylonjs/core"
 import { MovingVars } from "./constants";
-import "../node_modules/@babylonjs/loaders/glTF";
 import { buyable } from "./constants";
 import GameScene from "./GameScene";
 

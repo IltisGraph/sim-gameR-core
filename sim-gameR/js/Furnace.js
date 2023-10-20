@@ -1,14 +1,15 @@
-import { AbstractMesh, Vector2 } from "@babylonjs/core";
+import * as BABYLON from "@babylonjs/core";
+
 
 export default class Furnace {
     /**
      * 
-     * @param {Vector2} position 
-     * @param {AbstractMesh} mesh 
+     * @param {BABYLON.Vector2} position 
+     * @param {BABYLON.AbstractMesh} mesh 
      */
     constructor(position, mesh) {
-        this.x = position._x;
-        this.y = position._y;
+        this.x = position.x;
+        this.y = position.y;
         this.mesh = mesh;
     }
 
@@ -18,5 +19,19 @@ export default class Furnace {
 
     onclick() {
         console.log("clicked furnace!");
+    }
+
+    getRTDBdata() {
+        let out = {};
+        out["x"] = this.mesh.position.x / 2;
+        out["z"] = this.mesh.position.z / 2;
+        out["type"] = "Furnace";
+
+        return out;
+    }
+
+    loadFromData(data) {
+        this.mesh.position.x = data["x"];
+        this.mesh.position.z = data["z"];
     }
 }

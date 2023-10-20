@@ -1,6 +1,6 @@
 import { MovingVars, buyable, island_size } from "./constants";
-import * as BABYLON from "../node_modules/@babylonjs/core"
-import "../node_modules/@babylonjs/loaders/glTF";
+import * as BABYLON from "@babylonjs/core";
+import "@babylonjs/loaders/glTF";
 import ShopScene from "./ShopScene";
 import Mine from "./Mine";
 import Furnace from "./Furnace";
@@ -129,28 +129,37 @@ export default class GameScene {
                         console.log("moving current movingMeshwithParent")
                         switch (parseInt(dir)) {
                             case 0:
+                                // update rtdb
+                                this.game.set(this.game.ref(this.game.db, "villages/" + this.game.plot + "/" + (this.movingMeshwithParent.position.x / 2) + "|" + (this.movingMeshwithParent.position.z / 2)), 0);
                                 this.movingMeshwithParent.position.x += 2;
                                 for (let i = 0; i < this.movingUIMeshes.length; i++) {
                                     this.movingUIMeshes[i].position.x += 2;
                                 }
+                                this.game.set(this.game.ref(this.game.db, "villages/" + this.game.plot + "/" + (this.movingMeshwithParent.position.x / 2) + "|" + (this.movingMeshwithParent.position.z / 2)), this.buildings[this.movingMeshwithParent.name].getRTDBdata());
                                 break;
                             case 3:
+                                this.game.set(this.game.ref(this.game.db, "villages/" + this.game.plot + "/" + (this.movingMeshwithParent.position.x / 2) + "|" + (this.movingMeshwithParent.position.z / 2)), 0);
                                 this.movingMeshwithParent.position.z -= 2;
                                 for (let i = 0; i < this.movingUIMeshes.length; i++) {
                                     this.movingUIMeshes[i].position.z -= 2;
                                 }
+                                this.game.set(this.game.ref(this.game.db, "villages/" + this.game.plot + "/" + (this.movingMeshwithParent.position.x / 2) + "|" + (this.movingMeshwithParent.position.z / 2)), this.buildings[this.movingMeshwithParent.name].getRTDBdata());
                                 break;
                             case 1:
+                                this.game.set(this.game.ref(this.game.db, "villages/" + this.game.plot + "/" + (this.movingMeshwithParent.position.x / 2) + "|" + (this.movingMeshwithParent.position.z / 2)), 0);
                                 for (let i = 0; i < this.movingUIMeshes.length; i++) {
                                     this.movingUIMeshes[i].position.x -= 2;
                                 }
                                 this.movingMeshwithParent.position.x -= 2;
+                                this.game.set(this.game.ref(this.game.db, "villages/" + this.game.plot + "/" + (this.movingMeshwithParent.position.x / 2) + "|" + (this.movingMeshwithParent.position.z / 2)), this.buildings[this.movingMeshwithParent.name].getRTDBdata());
                                 break;
                             case 2:
+                                this.game.set(this.game.ref(this.game.db, "villages/" + this.game.plot + "/" + (this.movingMeshwithParent.position.x / 2) + "|" + (this.movingMeshwithParent.position.z / 2)), 0);
                                 for (let i = 0; i < this.movingUIMeshes.length; i++) {
                                     this.movingUIMeshes[i].position.z += 2;
                                 }
                                 this.movingMeshwithParent.position.z += 2;
+                                this.game.set(this.game.ref(this.game.db, "villages/" + this.game.plot + "/" + (this.movingMeshwithParent.position.x / 2) + "|" + (this.movingMeshwithParent.position.z / 2)), this.buildings[this.movingMeshwithParent.name].getRTDBdata());
                                 break;
                         }
 
@@ -267,7 +276,7 @@ export default class GameScene {
     static loadNewBuilding(buildingNr) {
         BABYLON.SceneLoader.ImportMesh(
             "",
-            "../3d/",
+            "./3d/",
             buyable[buildingNr] + ".gltf",
             this.scene,
             function (meshes, particleSystems, skeletons, animationGroups) {
@@ -294,6 +303,11 @@ export default class GameScene {
                     animationGroups[0].stop();
                     animationGroups[0].loopAnimation = true;
                 }
+
+
+                // add to rtdb
+                const buildingData = GameScene.buildings[mesh.name].getRTDBdata();
+                GameScene.game.set(GameScene.game.ref(GameScene.game.db, "villages/" + GameScene.game.plot + "/" + buildingData["x"] + "|" + buildingData["z"]), buildingData);
             }
         )
     }
@@ -347,12 +361,57 @@ export default class GameScene {
 
     }
 
-    /**
-     * loads the game from the rtdb
-     * @param {integer} plotNr 
-     */
-    // static loadGame(plotNr, get, ref, db) {
-    //     const user = localStorage.getItem("user_sim");
-    //     get(ref(db))
-    // }
+    static load() {
+        this.game.get(this.game.child(this.game.ref(this.game.db), "villages/" + this.game.plot)).then((snapshot) => {
+            const keys = Object.keys(snapshot.val());
+            const val = snapshot.val();
+            const converter = {
+                "Mine": 0,
+                "Furnace": 1,
+                "Saw": 2
+            };
+            for (let key of keys) {
+                if (val[key] === 0) continue;
+                this.loadNewBuildingFromRTDB(converter[val[key]["type"]], val[key]);
+            }
+        })
+    }
+
+    static loadNewBuildingFromRTDB(buildingNr, buildingData) {
+        BABYLON.SceneLoader.ImportMesh(
+            "",
+            "./3d/",
+            buyable[buildingNr] + ".gltf",
+            this.scene,
+            function (meshes, particleSystems, skeletons, animationGroups) {
+                console.log("successfully loaded from rtdb: " + buildingNr);
+                const mesh = meshes[0];
+                mesh.name = Date.now();
+                mesh.position.set(10, 0, 10);
+                if (buildingNr == 0) {
+                    // mine
+                    GameScene.buildings[mesh.name] = new Mine(mesh.position, mesh);
+                    animationGroups[1].stop();
+                    animationGroups[1].loopAnimation = true;
+                    animationGroups[0].stop();
+                    animationGroups[0].loopAnimation = true;
+
+                } else if (buildingNr == 1) {
+                    // furnace
+                    GameScene.buildings[mesh.name] = new Furnace(mesh.position, mesh);
+                } else if (buildingNr == 2) {
+                    // saw
+                    GameScene.buildings[mesh.name] = new Saw(mesh.position, mesh);
+                    animationGroups[1].stop();
+                    animationGroups[1].loopAnimation = true;
+                    animationGroups[0].stop();
+                    animationGroups[0].loopAnimation = true;
+                }
+
+
+                GameScene.buildings[mesh.name].loadFromData(buildingData);
+                
+            }
+        )
+    }
 }

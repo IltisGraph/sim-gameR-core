@@ -6,13 +6,25 @@ export default class Game {
      * @param {BABYLON.Scene} sceneClass 
      * @param {BABYLON.engine} engine 
      * @param {logEvent} logEvent 
-     * @param {analytics} analytics 
+     * @param {analytics} analytics
+     * @param {set} set
+     * @param {get} get
+     * @param {ref} ref  
+     * @param {database} db
+     * @param {child} child 
+     * @param {number} plot 
      */
-    constructor (sceneClass, engine, logEvent, analytics) {
+    constructor (sceneClass, engine, logEvent, analytics, set, get, ref, db, child, plot) {
         this.sceneClass = sceneClass;
         this.engine = engine;
         this.analytics = analytics;
         this.logEvent = logEvent;
+        this.set = set;
+        this.get = get;
+        this.ref = ref;
+        this.db = db;
+        this.plot = plot;
+        this.child = child;
     }
 
     /**
