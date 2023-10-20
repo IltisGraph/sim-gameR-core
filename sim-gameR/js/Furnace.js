@@ -31,7 +31,7 @@ export default class Furnace {
     }
 
     loadFromData(data) {
-        this.mesh.position.x = data["x"];
-        this.mesh.position.z = data["z"];
+        this.mesh.position.x = data["x"] * 2;
+        this.mesh.position.z = data["z"] * 2;
     }
 }
