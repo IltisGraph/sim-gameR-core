@@ -1,7 +1,7 @@
 {
   "name": "sim-gamer",
   "private": true,
-  "version": "1.0.1",
+  "version": "0.0.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -21,6 +21,9 @@
         "@babylonjs/core": "./node_modules/@babylonjs/core",
         "@babylonjs/loaders/glTF": "./node_modules/@babylonjs/loaders/glTF"
       }
+    },
+    "build": {
+      "target": "esnext"
     }
   }
 }

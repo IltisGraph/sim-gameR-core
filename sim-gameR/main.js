@@ -120,8 +120,10 @@ remoteConfig.defaultConfig = {
 };
 
 activate(remoteConfig);
-
-await fetchConfig(remoteConfig);
+async function f() {
+    await fetchConfig(remoteConfig);
+}
+f();
 
 
 
