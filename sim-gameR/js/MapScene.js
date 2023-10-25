@@ -53,10 +53,16 @@ export default class MapScene {
             button.onclick = () => {
                 console.log("want to map: " + (i + 1));
             }
-            button.innerText = i;
-            button.style.width = "75px";
-            button.style.height = "75px";
+            button.innerText = i + 1;
+            button.style.width = "10%";
+            button.style.height = "10%";
+            button.style.margin = "10px";
             document.getElementById("mapbutton-holder").appendChild(button);
+            if ((i+1) % 6 === 0) {
+                const b = document.createElement("br");
+                document.getElementById("mapbutton-holder").appendChild(b);
+                this.buttons.push(b);
+            }
         }
 
         document.getElementById("map").innerText = "Verlassen";
