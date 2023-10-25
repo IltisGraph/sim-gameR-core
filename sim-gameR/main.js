@@ -120,7 +120,7 @@ remoteConfig.defaultConfig = {
 
 activate(remoteConfig);
 
-fetchConfig(remoteConfig);
+await fetchConfig(remoteConfig);
 
 
 
