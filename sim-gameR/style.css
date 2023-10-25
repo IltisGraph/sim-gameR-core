@@ -52,16 +52,16 @@ body {
 
 #shop {
   position: fixed;
-  bottom: 1%;
-  right: 1%;
+  bottom: 5px;
+  right: 5px;
   height: 75px;
   width: 75px;
 }
 
 #map {
   position: fixed;
-  bottom: 16%;
-  right: 1%;
+  bottom: 90px;
+  right: 5px;
   height: 60px;
   width: 60px;
 }
@@ -76,12 +76,12 @@ body {
 
 @keyframes move-button {
   from {
-    bottom: 16%;
+    bottom: 90px;
     width: 60px;
     height: 60px;
   }
   to {
-    bottom: 1%;
+    bottom: 5px;
     width: 75px;
     height: 75px;
   }
@@ -89,12 +89,12 @@ body {
 
 @keyframes shop-button-back {
   from {
-    bottom: 1%;
+    bottom: 5px;
     width: 75px;
     height: 75px;
   }
   to {
-    bottom: 16%;
+    bottom: 90px;
     width: 60px;
     height: 60px;
   }

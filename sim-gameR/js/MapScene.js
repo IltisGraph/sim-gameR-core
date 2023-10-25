@@ -42,7 +42,7 @@ export default class MapScene {
     static createEachTimeEventListeners() {
         document.getElementById("map").style.animation = "move-button 0.15s linear";
         document.getElementById("map").onanimationend = () => {
-            document.getElementById("map").style.bottom = "1%";
+            document.getElementById("map").style.bottom = "15px";
             document.getElementById("map").style.width = "75px";
             document.getElementById("map").style.height = "75px";
         }
@@ -65,7 +65,7 @@ export default class MapScene {
             document.getElementById("map").innerText = "Karte";
             document.getElementById("map").style.animation = "shop-button-back 0.15s linear";
             document.getElementById("map").onanimationend = () => {
-                document.getElementById("map").style.bottom = "15%";
+                document.getElementById("map").style.bottom = "90px";
                 document.getElementById("map").style.width = "65px";
                 document.getElementById("map").style.height = "65px";
                 document.getElementById("map").animation = "none";
