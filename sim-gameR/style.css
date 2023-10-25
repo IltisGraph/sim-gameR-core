@@ -1,58 +1,74 @@
-html, body {
-    overflow: hidden;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
+html,
+body {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 #renderCanvas {
-    width: 100%;
-    height: 100%;
-    touch-action: none;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
 }
 
 .window {
-    text-align: center;
-    border-radius: 12px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 300px;
-    height: 200px;
-    background-color: white;
-    border: 1px solid black;
-    padding: 10px;
-  }
+  text-align: center;
+  border-radius: 12px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 200px;
+  background-color: white;
+  border: 1px solid black;
+  padding: 10px;
+}
 
-  #username {
-    margin-top: 50px;
-  }
-  #password {
-    margin-top: 10px;
-  }
-  #submitBtn {
-    margin-top: 10px;
-  }
+#username {
+  margin-top: 50px;
+}
 
-  .auth-blocker {
-    position: fixed;
-    display: block;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    pointer-events: none;
-  }
+#password {
+  margin-top: 10px;
+}
 
-  #shop {
-    position: fixed;
-    bottom: 1%;
-    right: 1%;
-    height: 75px;
-    width: 75px;
-  }
-  
-  
+#submitBtn {
+  margin-top: 10px;
+}
+
+.auth-blocker {
+  position: fixed;
+  display: block;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+#shop {
+  position: fixed;
+  bottom: 1%;
+  right: 1%;
+  height: 75px;
+  width: 75px;
+}
+
+#map {
+  position: fixed;
+  bottom: 16%;
+  right: 1%;
+  height: 60px;
+  width: 60px;
+}
+
+#mapbutton-holder {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: none;
+}

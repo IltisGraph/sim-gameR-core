@@ -174,5 +174,7 @@ export default class ShopScene {
         document.getElementById("shop").onclick = () => {
             this.game.setScene(GameScene);
         }
+
+        document.getElementById("map").style.display = "none";
     }
 }

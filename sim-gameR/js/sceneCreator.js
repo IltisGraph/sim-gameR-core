@@ -1,5 +1,6 @@
 import "../node_modules/@babylonjs/loaders/glTF";
 import GameScene from "./GameScene";
+import MapScene from "./MapScene";
 import ShopScene from "./ShopScene";
 import {island_size, buyable, MovingVars} from "./constants";
 
@@ -11,6 +12,8 @@ export function preloadScenes(engine, analytics, event) {
     ShopScene.createScene(engine);
     GameScene.createEventListeners(event, analytics, engine);
     ShopScene.createEventListeners();
+    MapScene.createScene(engine);
+    MapScene.createEventListeners(event, analytics, engine);
      
 }
 /**

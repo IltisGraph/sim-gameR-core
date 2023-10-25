@@ -5,6 +5,7 @@ import ShopScene from "./ShopScene";
 import Mine from "./Mine";
 import Furnace from "./Furnace";
 import Saw from "./Saw";
+import MapScene from "./MapScene";
 
 
 export default class GameScene {
@@ -267,6 +268,13 @@ export default class GameScene {
         }
 
         document.getElementById("shop").innerText = "Shop";
+
+        document.getElementById("map").onclick = () => {
+            console.log("clicked on map!");
+            this.game.logEvent(this.game.analytics, "map_open");
+            this.game.setScene(MapScene);
+        }
+        document.getElementById("map").style.display = "block"
     }
 
     /**
