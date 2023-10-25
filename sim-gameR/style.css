@@ -72,3 +72,30 @@ body {
   height: 100%;
   display: none;
 }
+
+
+@keyframes move-button {
+  from {
+    bottom: 16%;
+    width: 60px;
+    height: 60px;
+  }
+  to {
+    bottom: 1%;
+    width: 75px;
+    height: 75px;
+  }
+}
+
+@keyframes shop-button-back {
+  from {
+    bottom: 1%;
+    width: 75px;
+    height: 75px;
+  }
+  to {
+    bottom: 16%;
+    width: 60px;
+    height: 60px;
+  }
+}

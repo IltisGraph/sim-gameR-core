@@ -12,6 +12,7 @@ import { getRemoteConfig, getValue, fetchConfig, activate } from "https://www.gs
 import Game from "./js/Game";
 import GameScene from "./js/GameScene";
 import ShopScene from "./js/ShopScene";
+import MapScene from "./js/MapScene";
 import { MovingVars, island_size } from "./js/constants";
 ;
 // TODO: Add SDKs for Firebase products that you want to use
@@ -137,6 +138,7 @@ preloadScenes(engine, analytics, logEvent);
 const game = new Game(null, engine, logEvent, analytics, set, get, ref, db, child, plot);
 GameScene.game = game;
 ShopScene.game = game;
+MapScene.game = game;
 game.sceneClass = GameScene;
 game.setScene(GameScene);
 
